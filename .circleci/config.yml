@@ -1,14 +1,112 @@
 version: 2.1
+
+commands:
+  install_deps:
+    steps:
+      - run:
+        name: Install dependencies
+        command: |
+          npm install
+
 jobs:
+  # CI Build
+  # Might need to remove npm start
   build:
     docker:
       - image: circleci/node:lts
-
     steps:
       - checkout
+      - install_deps
+      - npm start
+
+  # Unit testing
+  unit-tests:
+    docker:
+      - image: circleci/node:lts
+    environment:
+      JEST_JUNIT_OUTPUT_DIR: test-output
+    steps:
+      - checkout
+      - install_deps
+      - run:
+          name: Run tests
+          command: |
+            mkdir -p test-output
+            npm run unit-tests
+      - store_test_results:
+          path: test-output
+
+  # Integration testing
+  # Change port APP_PORT to 3000
+  integration-tests:
+    docker:
+      - image: circleci/node:lts
+      - image: mongo:4.0
+    environment:
+      APP_PORT: 3000
+      JEST_JUNIT_OUTPUT_DIR: test-output
+    steps:
+      - checkout
+      - install_deps
+      - run:
+          name: Run tests
+          command: |
+            mkdir -p test-output
+            npm run integration-tests
+      - store_test_results:
+          path: test-output
+
+  # Static Code Analysis / Lint
+  # sast:
+  #   docker:
+  #     - image: circleci/node:lts
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: Install NodeJsScan
+  #         command: |
+  #           sudo apt update
+  #           sudo apt install python3-pip
+  #           pip3 install nodejsscan
+  #     - run:
+  #         name: Run NodeJsScan
+  #         command: |
+  #           nodejsscan -d ./ -o sast-output.json
+  #     - store_artifacts:
+  #         path: sast-output.json
+  #     - run:
+  #         name: Parse sast report
+  #         command: |
+  #           # exit with a non-zero exit code if there are any security issues
+  #           exit $(cat sast-output.json | jq .total_count.sec)
+
+  # Packing
+  pack:
+    docker:
+      - image: circleci/node:lts
+    environment:
+      NODE_ENV: production
+    steps:
+      - checkout
+      - install_deps
+      - store_artifacts:
+          path: dist
 
 workflows:
   version: 2
   build-test-package:
     jobs:
       - build
+      - unit-tests:
+          requires:
+            - build
+      - integration-tests:
+          requires:
+            - build
+      - sast:
+          requires:
+            - build
+      - pack:
+          requires:
+            - unit-tests
+            - integration-tests
