@@ -23,7 +23,7 @@ jobs:
           name: Run tests
           command: |
             mkdir -p test-output
-            npm run unit-tests
+            npm run test-unit
       - store_test_results:
           path: test-output
   
@@ -61,7 +61,7 @@ jobs:
           name: Run tests
           command: |
             mkdir -p test-output
-            npm run integration-tests
+            npm run test-integration
       - store_test_results:
           path: test-output
 
