@@ -110,9 +110,9 @@ workflows:
       - integration-tests:
           requires:
             - build
-      - sast:
-          requires:
-            - build
+      # - sast:
+      #     requires:
+      #       - build
       - pack:
           requires:
             - unit-tests
