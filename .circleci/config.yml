@@ -9,33 +9,42 @@ commands:
             npm install
 
 jobs:
-  # CI Build
+  # CI build and run unit tests
   # Might need to remove npm start
   build:
     docker:
       - image: circleci/node:lts
-    steps:
-      - checkout
-      - install_deps
-      - npm start
-
+      environment:
+        JEST_JUNIT_OUTPUT_DIR: test-output
+      steps:
+        - checkout
+        - install_deps
+        - run:
+            name: Run tests
+            command: |
+              npm install --global mocha
+              mkdir -p test-output
+              npm run unit-tests
+        - store_test_results:
+            path: test-output
+  
   # Unit testing
   # Mocha-based
-  unit-tests:
-    docker:
-      - image: circleci/node:lts
-    environment:
-      JEST_JUNIT_OUTPUT_DIR: test-output
-    steps:
-      - checkout
-      - install_deps
-      - run:
-          name: Run tests
-          command: |
-            mkdir -p test-output
-            npm run unit-tests
-      - store_test_results:
-          path: test-output
+  # unit-tests:
+  #   docker:
+  #     - image: circleci/node:lts
+  #   environment:
+  #     JEST_JUNIT_OUTPUT_DIR: test-output
+  #   steps:
+  #     - checkout
+  #     - install_deps
+  #     - run:
+  #         name: Run tests
+  #         command: |
+  #           mkdir -p test-output
+  #           npm run unit-tests
+  #     - store_test_results:
+  #         path: test-output
 
   # Integration testing
   # Change port APP_PORT to 3000
