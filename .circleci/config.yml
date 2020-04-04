@@ -22,9 +22,8 @@ jobs:
       - run:
           name: Run tests
           command: |
-            npm install --global mocha
             mkdir -p test-output
-            sudo npm run unit-tests
+            npm run unit-tests
       - store_test_results:
           path: test-output
   
