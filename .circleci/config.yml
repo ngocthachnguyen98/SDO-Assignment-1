@@ -14,19 +14,19 @@ jobs:
   build:
     docker:
       - image: circleci/node:lts
-      environment:
-        JEST_JUNIT_OUTPUT_DIR: test-output
-      steps:
-        - checkout
-        - install_deps
-        - run:
-            name: Run tests
-            command: |
-              npm install --global mocha
-              mkdir -p test-output
-              npm run unit-tests
-        - store_test_results:
-            path: test-output
+    environment:
+      JEST_JUNIT_OUTPUT_DIR: test-output
+    steps:
+      - checkout
+      - install_deps
+      - run:
+          name: Run tests
+          command: |
+            npm install --global mocha
+            mkdir -p test-output
+            npm run unit-tests
+      - store_test_results:
+          path: test-output
   
   # Unit testing
   # Mocha-based
@@ -107,9 +107,6 @@ workflows:
   build-test-package:
     jobs:
       - build
-      - unit-tests:
-          requires:
-            - build
       - integration-tests:
           requires:
             - build
