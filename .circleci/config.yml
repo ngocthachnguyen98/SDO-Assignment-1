@@ -115,5 +115,4 @@ workflows:
       #       - build
       - pack:
           requires:
-            - unit-tests
             - integration-tests
