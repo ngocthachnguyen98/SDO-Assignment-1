@@ -4,9 +4,9 @@ commands:
   install_deps:
     steps:
       - run:
-        name: Install dependencies
-        command: |
-          npm install
+          name: Install dependencies
+          command: |
+            npm install
 
 jobs:
   # CI Build
@@ -20,6 +20,7 @@ jobs:
       - npm start
 
   # Unit testing
+  # Mocha-based
   unit-tests:
     docker:
       - image: circleci/node:lts
