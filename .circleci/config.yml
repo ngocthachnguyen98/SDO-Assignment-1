@@ -7,6 +7,7 @@ commands:
           name: Install dependencies
           command: |
             npm install
+            cd src
 
 jobs:
   # CI build and run unit tests
@@ -115,4 +116,6 @@ workflows:
       # - pack:
       #     requires:
       #       - integration-tests
-      - pack
+      - pack:
+          requires:
+            - build
