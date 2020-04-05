@@ -23,6 +23,7 @@ jobs:
       - run:
           name: Run tests
           command: |
+            cd src
             mkdir -p test-output
             npm run test-unit
       - store_test_results:
