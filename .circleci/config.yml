@@ -6,8 +6,8 @@ commands:
       - run:
           name: Install dependencies
           command: |
-            npm install
             cd src
+            npm install
 
 jobs:
   # CI build and run unit tests
