@@ -10,12 +10,12 @@ commands:
 
 jobs:
   # CI build and run unit tests
-  # Might need to remove npm start
+  # Might need to add npm start
   build:
     docker:
       - image: circleci/node:lts
     environment:
-      JEST_JUNIT_OUTPUT_DIR: test-output
+      MOCHA_FILE: test-output
     steps:
       - checkout
       - install_deps
@@ -47,23 +47,23 @@ jobs:
 
   # Integration testing
   # Change port APP_PORT to 3000
-  integration-tests:
-    docker:
-      - image: circleci/node:lts
-      - image: mongo:4.0
-    environment:
-      APP_PORT: 3000
-      JEST_JUNIT_OUTPUT_DIR: test-output
-    steps:
-      - checkout
-      - install_deps
-      - run:
-          name: Run tests
-          command: |
-            mkdir -p test-output
-            npm run test-integration
-      - store_test_results:
-          path: test-output
+  # integration-tests:
+  #   docker:
+  #     - image: circleci/node:lts
+  #     - image: mongo:4.0
+  #   environment:
+  #     APP_PORT: 3000
+  #     JEST_JUNIT_OUTPUT_DIR: test-output
+  #   steps:
+  #     - checkout
+  #     - install_deps
+  #     - run:
+  #         name: Run tests
+  #         command: |
+  #           mkdir -p test-output
+  #           npm run test-integration
+  #     - store_test_results:
+  #         path: test-output
 
   # Static Code Analysis / Lint
   # sast:
@@ -106,12 +106,13 @@ workflows:
   build-test-package:
     jobs:
       - build
-      - integration-tests:
-          requires:
-            - build
+      # - integration-tests:
+      #     requires:
+      #       - build
       # - sast:
       #     requires:
       #       - build
-      - pack:
-          requires:
-            - integration-tests
+      # - pack:
+      #     requires:
+      #       - integration-tests
+      - pack
