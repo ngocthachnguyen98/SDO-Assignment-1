@@ -12,41 +12,20 @@ commands:
 jobs:
   # CI build and run unit tests
   # Might need to add npm start
-  # build:
-  #   docker:
-  #     - image: circleci/node:lts
-  #   environment:
-  #     MOCHA_FILE: ./src/test-output/unit_test_results.xml
-  #   steps:
-  #     - checkout
-  #     - install_deps
-  #     - run:
-  #         name: Run unit tests
-  #         command: |
-  #           cd src
-  #           mkdir -p test-output
-  #           npm run test-unit
-  #     - store_test_results:
-  #         path: ./src/test-output
-  #     - store_artifacts:
-  #         path: ./src/test-output
   build:
     docker:
       - image: circleci/node:lts
+    environment:
+      MOCHA_FILE: ./src/test-output/unit_test_results.xml
     steps:
       - checkout
       - install_deps
       - run:
-          name: Create directory
+          name: Run unit tests
           command: |
             cd src
             mkdir -p test-output
-      - run:
-          name: Run unit tests
-          command: mocha test --reporter mocha-junit-reporter
-          environment:
-            MOCHA_FILE: ./src/test-output/unit_test_results.xml
-          when: always
+            npm run test-unit
       - store_test_results:
           path: ./src/test-output
       - store_artifacts:
