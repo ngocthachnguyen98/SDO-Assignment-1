@@ -27,7 +27,7 @@ jobs:
             mkdir -p test-output
             npm run test-unit
       - store_test_results:
-          path: test-output
+          path: ./src/test-output
   
   # Unit testing
   # Mocha-based
