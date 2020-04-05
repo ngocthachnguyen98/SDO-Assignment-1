@@ -16,7 +16,7 @@ jobs:
     docker:
       - image: circleci/node:lts
     environment:
-      MOCHA_FILE: src/test-output/unit_test_results.xml
+      MOCHA_FILE: /src/test-output/unit_test_results.xml
     steps:
       - checkout
       - install_deps
@@ -27,9 +27,9 @@ jobs:
             mkdir -p test-output
             npm run test-unit
       - store_test_results:
-          path: src/test-output
+          path: /src/test-output
       - store_artifacts:
-          path: src/test-output
+          path: /src/test-output
   
   # Unit testing
   # Mocha-based
