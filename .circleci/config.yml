@@ -16,7 +16,7 @@ jobs:
     docker:
       - image: circleci/node:lts
     environment:
-      MOCHA_FILE: ./src/test-output/unit_test_results.xml
+      MOCHA_FILE: ./src/test-output/unit_test_results.xml 
     steps:
       - checkout
       - install_deps
@@ -30,24 +30,6 @@ jobs:
           path: ./src/test-output
       - store_artifacts:
           path: ./src/test-output
-  
-  # Unit testing
-  # Mocha-based
-  # unit-tests:
-  #   docker:
-  #     - image: circleci/node:lts
-  #   environment:
-  #     JEST_JUNIT_OUTPUT_DIR: test-output
-  #   steps:
-  #     - checkout
-  #     - install_deps
-  #     - run:
-  #         name: Run tests
-  #         command: |
-  #           mkdir -p test-output
-  #           npm run unit-tests
-  #     - store_test_results:
-  #         path: test-output
 
   # Integration testing
   # Change port APP_PORT to 3000
@@ -69,29 +51,23 @@ jobs:
   #     - store_test_results:
   #         path: test-output
 
-  # Static Code Analysis / Lint
-  # sast:
+  # ESLint / Static Code Analysis
+  # linting:
   #   docker:
   #     - image: circleci/node:lts
   #   steps:
   #     - checkout
+  #     - install_deps
   #     - run:
-  #         name: Install NodeJsScan
-  #         command: |
-  #           sudo apt update
-  #           sudo apt install python3-pip
-  #           pip3 install nodejsscan
+  #         command: eslint ./src --format junit --output-file ./src/test-output/eslint.xml
+  #         when: always
   #     - run:
-  #         name: Run NodeJsScan
-  #         command: |
-  #           nodejsscan -d ./ -o sast-output.json
+  #         name: Run linting
+  #         command: npm run test-lint
+  #     - store_test_results:
+  #         path: ./src/test-output
   #     - store_artifacts:
-  #         path: sast-output.json
-  #     - run:
-  #         name: Parse sast report
-  #         command: |
-  #           # exit with a non-zero exit code if there are any security issues
-  #           exit $(cat sast-output.json | jq .total_count.sec)
+  #         path: ./src/test-output
 
   # Packing
   pack:
@@ -110,15 +86,9 @@ workflows:
   build-test-package:
     jobs:
       - build
-      # - integration-tests:
+      # - linting:
       #     requires:
       #       - build
-      # - sast:
-      #     requires:
-      #       - build
-      # - pack:
-      #     requires:
-      #       - integration-tests
       - pack:
           requires:
             - build
