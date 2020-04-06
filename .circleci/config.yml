@@ -25,6 +25,7 @@ jobs:
           command: |
             cd src
             mkdir -p test-output
+            mocha test/unit --reporter mocha-junit-reporter
             npm run test-unit
       - store_test_results:
           path: ./src/test-output
