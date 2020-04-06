@@ -79,7 +79,7 @@ jobs:
       - checkout
       - install_deps
       - store_artifacts:
-          path: ./src/dist
+          path: ./
 
 workflows:
   version: 2
