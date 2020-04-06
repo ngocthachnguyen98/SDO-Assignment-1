@@ -77,10 +77,10 @@ jobs:
     steps:
       - checkout
       - install_deps
-      # - run: cd src
-      # - run: mkdir -p dist
-      # - store_artifacts:
-      #     path: dist
+      - run: cd src
+      - run: mkdir -p dist
+      - store_artifacts:
+          path: ./src/dist
 
 workflows:
   version: 2
@@ -93,7 +93,3 @@ workflows:
       - pack:
           requires:
             - build
-          # filters:
-          #   branches:
-          #     only:
-          #       - master
