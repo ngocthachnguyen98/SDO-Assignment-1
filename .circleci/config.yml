@@ -78,10 +78,10 @@ jobs:
       - checkout
       - install_deps
       - run: 
-        - name: Creating directory
-        - command: |
-            cd src
-            mkdir -p dist
+          - name: Creating directory
+          - command: |
+              cd src
+              mkdir -p dist
       - store_artifacts:
           path: ./src/dist
 
