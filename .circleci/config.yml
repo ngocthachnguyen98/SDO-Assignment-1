@@ -15,8 +15,6 @@ jobs:
   build:
     docker:
       - image: circleci/node:lts
-    environment:
-      MOCHA_FILE: ./src/test-output/unit_test_results.xml 
     steps:
       - checkout
       - install_deps
@@ -70,7 +68,7 @@ jobs:
   #         path: ./src/test-output
 
   # Packing
-  # Storing packages took too long! 
+  # Storing packages took too long! >15mins
   pack:
     docker:
       - image: circleci/node:lts
