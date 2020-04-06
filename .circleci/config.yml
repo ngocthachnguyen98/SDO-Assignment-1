@@ -15,8 +15,6 @@ jobs:
   build:
     docker:
       - image: circleci/node:lts
-    environment:
-      MOCHA_FILE: ./src/test-output/unit_test_results.xml 
     steps:
       - checkout
       - install_deps
@@ -27,9 +25,9 @@ jobs:
             mkdir -p test-output
             npm run test-unit
       - store_test_results:
-          path: test-output
+          path: ./src/test-output
       - store_artifacts:
-          path: test-output
+          path: ./src/test-output
 
   # Integration testing
   # Change port APP_PORT to 3000
@@ -70,7 +68,7 @@ jobs:
   #         path: ./src/test-output
 
   # Packing
-  # Storing packages took too long! 
+  # Storing packages took too long! >15mins
   pack:
     docker:
       - image: circleci/node:lts
