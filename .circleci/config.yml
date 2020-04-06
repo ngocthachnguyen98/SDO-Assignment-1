@@ -27,9 +27,9 @@ jobs:
             mkdir -p test-output
             npm run test-unit
       - store_test_results:
-          path: ./src/test-output
+          path: test-output
       - store_artifacts:
-          path: ./src/test-output
+          path: test-output
 
   # Integration testing
   # Change port APP_PORT to 3000
@@ -70,6 +70,7 @@ jobs:
   #         path: ./src/test-output
 
   # Packing
+  # Storing packages took too long! 
   pack:
     docker:
       - image: circleci/node:lts
@@ -78,8 +79,10 @@ jobs:
     steps:
       - checkout
       - install_deps
-      - store_artifacts:
-          path: ./
+      # - run: cd src
+      # - run: mkdir -p dist
+      # - store_artifacts:
+      #     path: dist
 
 workflows:
   version: 2
@@ -92,3 +95,7 @@ workflows:
       - pack:
           requires:
             - build
+          # filters:
+          #   branches:
+          #     only:
+          #       - master
