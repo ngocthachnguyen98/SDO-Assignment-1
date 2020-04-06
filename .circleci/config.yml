@@ -77,8 +77,11 @@ jobs:
     steps:
       - checkout
       - install_deps
-      - run: cd src
-      - run: mkdir -p dist
+      - run: 
+        - name: Creating directory
+        - command: |
+            cd src
+            mkdir -p dist
       - store_artifacts:
           path: ./src/dist
 
