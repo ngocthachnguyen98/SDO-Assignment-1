@@ -3,3 +3,5 @@ creds.sh
 terraform.tfstate
 terraform.tfstate.backup
 tmp/
+src/test-output
+src/lint-output

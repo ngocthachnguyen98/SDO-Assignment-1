@@ -50,22 +50,18 @@ jobs:
   #         path: test-output
 
   # ESLint / Static Code Analysis
-  # linting:
-  #   docker:
-  #     - image: circleci/node:lts
-  #   steps:
-  #     - checkout
-  #     - install_deps
-  #     - run:
-  #         command: eslint ./src --format junit --output-file ./src/test-output/eslint.xml
-  #         when: always
-  #     - run:
-  #         name: Run linting
-  #         command: npm run test-lint
-  #     - store_test_results:
-  #         path: ./src/test-output
-  #     - store_artifacts:
-  #         path: ./src/test-output
+  linting:
+    docker:
+      - image: circleci/node:lts
+    steps:
+      - checkout
+      - install_deps
+      - run:
+          name: Run unit tests
+          command: |
+            cd src
+            mkdir -p lint-output
+            npm run test-lint
 
   # Packing
   # Storing packages took too long! >15mins
