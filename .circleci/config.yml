@@ -57,7 +57,7 @@ jobs:
       - checkout
       - install_deps
       - run:
-          name: Run unit tests
+          name: Run linting
           command: |
             cd src
             mkdir -p lint-output

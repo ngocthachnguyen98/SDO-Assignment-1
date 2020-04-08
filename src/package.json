@@ -5,7 +5,7 @@
   "scripts": {
     "start": "cross-env DEBUG=express-sequelize node ./bin/www",
     "start:prod": "cross-env NODE_ENV=production DEBUG=express-sequelize node ./bin/www",
-    "test-lint": "eslint . && eslint -o ./lint-output/lint_result.html",
+    "test-lint": "eslint . --format junit --output-file ./lint-output/eslint_result.xml",
     "test-unit": "mocha test/unit --reporter mocha-junit-reporter --reporter-options mochaFile=./test-output/unit_test_results.xml",
     "test-coverage": "cross-env NODE_ENV=unit nyc report",
     "test-integration": "cross-env DB_USERNAME=postgres DB_PASSWORD=password DB_NAME=servian DB_HOSTNAME=localhost NODE_ENV=integration ",
