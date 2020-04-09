@@ -27,10 +27,12 @@ jobs:
       - run:
           name: Run unit tests
           command: |
+            cd src
             npm run test-unit
       - run:
           name: Generate code coverage reports
           command: |
+            cd src
             npm run test-coverage
       - store_test_results:
           path: ./src/test-output
