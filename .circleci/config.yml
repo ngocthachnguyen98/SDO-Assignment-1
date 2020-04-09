@@ -34,6 +34,29 @@ jobs:
       - store_artifacts:
           path: ./src/test-output
 
+  # Static Code Analysis
+  sast:
+    docker:
+      - image: circleci/node:lts
+    steps:
+      - checkout
+      - run:
+          name: Install NodeJsScan
+          command: |
+            sudo apt update
+            sudo apt install python3-pip
+            pip3 install nodejsscan
+      - run:
+          name: Run NodeJsScan
+          command: |
+            nodejsscan -d ./src -o sast-result.json
+      - store_artifacts:
+          path: sast-result.json
+      - run:
+          name: Parse SAST report
+          command: |
+            exit $(cat sast-output.json | jq .total_count.sec)
+
   # Integration testing
   # Change port APP_PORT to 3000
   # integration-tests:
@@ -54,23 +77,6 @@ jobs:
   #     - store_test_results:
   #         path: test-output
 
-  # ESLint / Static Code Analysis
-  # linting:
-  #   docker:
-  #     - image: circleci/node:lts
-  #   steps:
-  #     - checkout
-  #     - install_deps
-  #     - run:
-  #         name: Run linting
-  #         command: |
-  #           cd src
-  #           mkdir -p lint-output
-  #           npm run test-lint
-  #     - store_test_results:
-  #         path: ./src/lint-output
-  #     - store_artifacts:
-  #         path: ./src/lint-output
 
   # Packing
   pack:
@@ -94,6 +100,9 @@ workflows:
   build-test-package:
     jobs:
       - build
+      - sast:
+          requires:
+            - build
       - pack:
           requires:
             - build
