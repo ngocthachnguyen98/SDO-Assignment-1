@@ -55,7 +55,7 @@ jobs:
       - run:
           name: Parse SAST report
           command: |
-            exit $(cat sast-output.json | jq .total_count.sec)
+            exit $(cat sast-result.json | jq .total_count.sec)
 
   # Integration testing
   # Change port APP_PORT to 3000
