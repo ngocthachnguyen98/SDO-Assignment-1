@@ -18,22 +18,31 @@ jobs:
     steps:
       - checkout
       - install_deps
+
       - run:
           name: Run linting
           command: |
             cd src
             mkdir -p test-output
             npm run test-lint
+
       - run:
           name: Run unit tests
           command: |
             cd src
             npm run test-unit
+
       - run:
           name: Generate code coverage reports
           command: |
             cd src
             npm run test-coverage
+
+      - run:
+          name: Validate code coverage
+          command: |
+            bash <(curl -s https://codecov.io/bash)
+
       - store_test_results:
           path: ./src/test-output
       - store_artifacts:
