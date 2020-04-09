@@ -10,7 +10,7 @@ commands:
             npm install
 
 jobs:
-  # CI build and run unit tests
+  # CI build and run unit tests & linting
   # Might need to add npm start
   build:
     docker:
@@ -27,14 +27,17 @@ jobs:
       - run:
           name: Run unit tests
           command: |
-            cd src
             npm run test-unit
+      - run:
+          name: Generate code coverage reports
+          command: |
+            npm run test-coverage
       - store_test_results:
           path: ./src/test-output
       - store_artifacts:
           path: ./src/test-output
 
-  # Static Code Analysis
+  # Static Code Analysis (SAST)
   sast:
     docker:
       - image: circleci/node:lts
@@ -100,9 +103,9 @@ workflows:
   build-test-package:
     jobs:
       - build
-      - sast:
-          requires:
-            - build
+      # - sast:
+      #     requires:
+      #       - build
       - pack:
           requires:
             - build
