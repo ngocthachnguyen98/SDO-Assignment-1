@@ -19,10 +19,15 @@ jobs:
       - checkout
       - install_deps
       - run:
-          name: Run unit tests
+          name: Run linting
           command: |
             cd src
             mkdir -p test-output
+            npm run test-lint
+      - run:
+          name: Run unit tests
+          command: |
+            cd src
             npm run test-unit
       - store_test_results:
           path: ./src/test-output
@@ -50,25 +55,24 @@ jobs:
   #         path: test-output
 
   # ESLint / Static Code Analysis
-  linting:
-    docker:
-      - image: circleci/node:lts
-    steps:
-      - checkout
-      - install_deps
-      - run:
-          name: Run linting
-          command: |
-            cd src
-            mkdir -p lint-output
-            npm run test-lint
-      - store_test_results:
-          path: ./src/lint-output
-      - store_artifacts:
-          path: ./src/lint-output
+  # linting:
+  #   docker:
+  #     - image: circleci/node:lts
+  #   steps:
+  #     - checkout
+  #     - install_deps
+  #     - run:
+  #         name: Run linting
+  #         command: |
+  #           cd src
+  #           mkdir -p lint-output
+  #           npm run test-lint
+  #     - store_test_results:
+  #         path: ./src/lint-output
+  #     - store_artifacts:
+  #         path: ./src/lint-output
 
   # Packing
-  # Storing packages took too long! >15mins
   pack:
     docker:
       - image: circleci/node:lts
@@ -90,9 +94,6 @@ workflows:
   build-test-package:
     jobs:
       - build
-      - linting:
-          requires:
-            - build
       - pack:
           requires:
             - build
