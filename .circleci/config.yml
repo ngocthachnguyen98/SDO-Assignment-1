@@ -10,7 +10,7 @@ commands:
             npm install
 
 jobs:
-  # CI build and run unit tests
+  # CI build and run unit tests & linting
   # Might need to add npm start
   build:
     docker:
@@ -18,16 +18,36 @@ jobs:
     steps:
       - checkout
       - install_deps
+
+      - run:
+          name: Run linting
+          command: |
+            cd src
+            mkdir -p test-output
+            npm run test-lint
+
       - run:
           name: Run unit tests
           command: |
             cd src
-            mkdir -p test-output
             npm run test-unit
+
+      - run:
+          name: Generate code coverage reports
+          command: |
+            cd src
+            npm run test-coverage
+
+      - run:
+          name: Validate code coverage
+          command: |
+            bash <(curl -s https://codecov.io/bash)
+
       - store_test_results:
           path: ./src/test-output
       - store_artifacts:
           path: ./src/test-output
+
 
   # Integration testing
   # Change port APP_PORT to 3000
@@ -49,26 +69,8 @@ jobs:
   #     - store_test_results:
   #         path: test-output
 
-  # ESLint / Static Code Analysis
-  linting:
-    docker:
-      - image: circleci/node:lts
-    steps:
-      - checkout
-      - install_deps
-      - run:
-          name: Run linting
-          command: |
-            cd src
-            mkdir -p lint-output
-            npm run test-lint
-      - store_test_results:
-          path: ./src/lint-output
-      - store_artifacts:
-          path: ./src/lint-output
 
   # Packing
-  # Storing packages took too long! >15mins
   pack:
     docker:
       - image: circleci/node:lts
@@ -82,17 +84,14 @@ jobs:
           command: |
             cd src
             mkdir -p dist
-      - store_artifacts:
-          path: ./src/dist
+      # - store_artifacts:
+      #     path: ./src/dist
 
 workflows:
   version: 2
   build-test-package:
     jobs:
       - build
-      - linting:
-          requires:
-            - build
       - pack:
           requires:
             - build
