@@ -10,6 +10,7 @@ describe('models/index', function () {
 
   it('returns the user model', function () {
     var models = require('../../models');
-    expect(models.Users).not.to.be.ok();
+    expect(models.Users).to.be.ok();
+    var unused_var;
   });
 });
