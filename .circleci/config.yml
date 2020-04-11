@@ -48,28 +48,6 @@ jobs:
       - store_artifacts:
           path: ./src/test-output
 
-  # Static Code Analysis (SAST)
-  sast:
-    docker:
-      - image: circleci/node:lts
-    steps:
-      - checkout
-      - run:
-          name: Install NodeJsScan
-          command: |
-            sudo apt update
-            sudo apt install python3-pip
-            pip3 install nodejsscan
-      - run:
-          name: Run NodeJsScan
-          command: |
-            nodejsscan -d ./src -o sast-result.json
-      - store_artifacts:
-          path: sast-result.json
-      - run:
-          name: Parse SAST report
-          command: |
-            exit $(cat sast-result.json | jq .total_count.sec)
 
   # Integration testing
   # Change port APP_PORT to 3000
@@ -114,9 +92,6 @@ workflows:
   build-test-package:
     jobs:
       - build
-      # - sast:
-      #     requires:
-      #       - build
       - pack:
           requires:
             - build
