@@ -69,7 +69,7 @@ jobs:
   #         path: test-output
 
 
-  # Packing
+  # Packaging
   pack:
     docker:
       - image: circleci/node:lts
@@ -78,13 +78,8 @@ jobs:
     steps:
       - checkout
       - install_deps
-      - run: 
-          name: Creating directory
-          command: |
-            cd src
-            mkdir -p dist
       - store_artifacts:
-          path: ./src/dist
+          path: ./
 
 workflows:
   version: 2
