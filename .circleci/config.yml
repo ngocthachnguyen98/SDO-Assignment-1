@@ -78,8 +78,6 @@ jobs:
       IMAGE_NAME: sdo-a1/building-on-ci
     steps:
       - checkout
-      - install_deps
-
       - setup_remote_docker
 
       - run:
