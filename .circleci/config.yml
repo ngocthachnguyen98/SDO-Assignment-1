@@ -11,7 +11,6 @@ commands:
 
 jobs:
   # CI build and run unit tests & linting
-  # Might need to add npm start
   build:
     docker:
       - image: circleci/node:lts
@@ -70,22 +69,27 @@ jobs:
   #         path: test-output
 
 
-  # Packing
+  # Packaging
   pack:
     docker:
       - image: circleci/node:lts
     environment:
       NODE_ENV: production
+      IMAGE_NAME: sdo-a1/building-on-ci
     steps:
       - checkout
-      - install_deps
-      - run: 
-          name: Creating directory
-          command: |
-            cd src
-            mkdir -p dist
-      # - store_artifacts:
-      #     path: ./src/dist
+      - setup_remote_docker
+
+      - run:
+          name: Build Docker image
+          command: docker build -t $IMAGE_NAME:latest ./src
+      
+      - run:
+          name: Archive Docker image
+          command: docker save -o image.tar $IMAGE_NAME
+
+      - store_artifacts:
+          path: ./image.tar
 
 workflows:
   version: 2
@@ -95,3 +99,7 @@ workflows:
       - pack:
           requires:
             - build
+          filters:
+            branches:
+              only:
+                - master
