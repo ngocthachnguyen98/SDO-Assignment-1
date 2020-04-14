@@ -46,27 +46,34 @@ jobs:
           path: ./src/test-output
       - store_artifacts:
           path: ./src/test-output
+      - store_artifacts:
+          path: ./src/coverage
 
 
   # Integration testing
-  # Change port APP_PORT to 3000
-  # integration-tests:
-  #   docker:
-  #     - image: circleci/node:lts
-  #     - image: mongo:4.0
-  #   environment:
-  #     APP_PORT: 3000
-  #     JEST_JUNIT_OUTPUT_DIR: test-output
-  #   steps:
-  #     - checkout
-  #     - install_deps
-  #     - run:
-  #         name: Run integration tests
-  #         command: |
-  #           mkdir -p test-output
-  #           npm run test-integration
-  #     - store_test_results:
-  #         path: test-output
+  integration-tests:
+    docker:
+      - image: circleci/node:lts
+      - image: circleci/postgres:9.6-alpine
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: servian
+    steps:
+      - checkout
+      - install_deps
+
+      - run:
+          name: Run integration tests
+          command: |
+            cd src
+            mkdir -p test-output
+            npm run test-integration
+
+      - store_test_results:
+          path: ./src/test-output
+      - store_artifacts:
+          path: ./src/test-output
 
 
   # Packaging
@@ -96,6 +103,9 @@ workflows:
   build-test-package:
     jobs:
       - build
+      - integration-tests:
+          requires:
+            - build
       - pack:
           requires:
             - build
