@@ -3,9 +3,9 @@ version: "3"
 services: 
   db:
     container_name: db
-    image: postgres:9.6.9-alpine
+    image: postgres:9.6-alpine
     restart: always
     environment:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: servian
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: servian
