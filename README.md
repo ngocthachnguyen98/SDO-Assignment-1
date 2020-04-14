@@ -4,17 +4,17 @@
 
 **Student Number: s3651311**
 
-The goal of this assignement is for ACME corp to be able to commit the files into their own GitHub repository and set up a *CircleCI pipeline*, and have it work with no modification to the files necessary
+The goal of this assignement is for ACME corp to be able to commit the files into their own GitHub repository and set up a *CircleCI Pipeline*, and have it work with no modification to the files necessary.
 
 In the root directory, a CircleCi configuration file is provided, in which defines a pipeline that automates build, test and package tasks.
 
-The package.json is ready to be installed via npm, with all the neccessary dependencies and scripts clarified. 
+The `package.json` is ready to be installed via `npm`, with all the neccessary dependencies and scripts clarified. 
 
 ---
 
 ## Running unit tests
 
-In the `src/package.json` file, a `test-unit` script is prepared to initiate the unit test with *Mocha*. The command is written with the `--reporter mocha-junit-reporter` flag to output `unit_test_results.xml`. The alternate location of `unit_test_results.xml` is specified with `--reporter-options mochaFile=...`.
+In the `src/package.json` file, a `test-unit` script is prepared to initiate the unit test with *Mocha*. The command is written with the `--reporter mocha-junit-reporter` flag to output `unit_test_results.xml`. The alternate location of `unit_test_results.xml` is specified with `--reporter-options mochaFile=...`
 
 ```
 "test-unit": "cross-env NODE_ENV=unit nyc mocha test/unit --reporter mocha-junit-reporter --reporter-options mochaFile=./test-output/unit_test_results.xml",
@@ -51,9 +51,9 @@ In the *CircleCI Pipeline*, linting is automated in `build` job:
 - run:
     name: Run linting
     command: |
-    cd src
-    mkdir -p test-output
-    npm run test-lint
+        cd src
+        mkdir -p test-output
+        npm run test-lint
 ```
 
 ---
@@ -95,7 +95,7 @@ There are 2 example failure scenarios that are implemented on branch f/multiple-
     - One that fails the unit test
     - One that fails the linting
 
-A screenshot of the *CircleCI pipeline* of this branch is provided in the Screenshots folder. To check the commits, do:
+A screenshot of the *CircleCI pipeline* of this branch is provided in the `Screenshots` folder in the submission. To check the commits, do:
 
 ```
 git checkout f/multiple-failure-scenarios
@@ -142,7 +142,7 @@ pack:
 
 ## Running integration tests
 
-In the `src/package.json` file, a `test-integration` script is prepared to initiate the unit test with *Mocha*. Similiar to the unit tests, the command is written with the `--reporter mocha-junit-reporter` flag to output `integration_test_results.xml`. The alternate location of `integration_test_results.xml` is specified with `--reporter-options mochaFile=...`.
+In the `src/package.json` file, a `test-integration` script is prepared to initiate the integration test with *Mocha*. Similiar to the unit tests, the command is written with the `--reporter mocha-junit-reporter` flag to output `integration_test_results.xml`. The alternate location of `integration_test_results.xml` is specified with `--reporter-options mochaFile=...`
 
 ```
 "test-integration": "cross-env DB_USERNAME=postgres DB_PASSWORD=password DB_NAME=servian DB_HOSTNAME=localhost NODE_ENV=integration nyc mocha test/integration --reporter mocha-junit-reporter --reporter-options mochaFile=./test-output/integration_test_results.xml",
