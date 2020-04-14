@@ -46,6 +46,8 @@ jobs:
           path: ./src/test-output
       - store_artifacts:
           path: ./src/test-output
+      - store_artifacts:
+          path: ./src/coverage
 
 
   # Integration testing
@@ -53,19 +55,27 @@ jobs:
   integration-tests:
     docker:
       - image: circleci/node:lts
-      - image: mongo:4.0
+      - image: circleci/postgres:12.2-alpine
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: circle_test
+          # DB_USERNAME: username
+          # DB_PASSWORD: password
+          # DB_NAME: database
+          # DB_HOSTNAME: host
     environment:
-      APP_PORT: 3000
-      JEST_JUNIT_OUTPUT_DIR: test-output
+      APP_PORT: 4000
     steps:
       - checkout
       - install_deps
+
       - run:
           name: Run integration tests
           command: |
             cd src
             mkdir -p test-output
             npm run test-integration
+
       - store_test_results:
           path: ./src/test-output
       - store_artifacts:
