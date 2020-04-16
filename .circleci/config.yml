@@ -99,7 +99,8 @@ jobs:
           name: Start the app
           command: |
             cd src
-            npm run start         
+            npm run start    
+          background: true     
       
       - run:
           name: Run e2e tests
