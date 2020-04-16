@@ -76,6 +76,36 @@ jobs:
           path: ./src/test-output
 
 
+  # E2E testing
+  e2e-tests:
+    docker:
+      - image: circleci/node:lts
+      - image: circleci/postgres:9.6-alpine
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: servian
+    steps:
+      - checkout
+      - install_deps
+
+      - run: 
+          name: Start local server
+          command: |
+            npm run start
+            npx wait-on http://localhost:3000
+      - run:
+          name: Run e2e tests
+          command: |
+            cd src
+            mkdir -p test-output
+            npm run test-e2e
+
+      - store_test_results:
+          path: ./src/test-output
+      - store_artifacts:
+          path: ./src/test-output
+
   # Packaging
   pack:
     docker:
