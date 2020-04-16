@@ -100,7 +100,7 @@ jobs:
           command: |
             cd src
             node_modules/.bin/sequelize db:migrate
-            
+
       - run: 
           name: Start the app in the background
           command: |
@@ -115,7 +115,7 @@ jobs:
             npm run test-e2e
 
       - store_artifacts:
-          path: ./src/qawolf
+          path: ./qawolf
 
 
   # Packaging
