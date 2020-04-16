@@ -108,10 +108,8 @@ jobs:
             cd src
             npm run test-e2e
 
-      # - store_test_results:
-      #     path: ./src/test-output
-      # - store_artifacts:
-      #     path: ./src/test-output
+      - store_artifacts:
+          path: ./src/qawolf
 
 
   # Packaging
