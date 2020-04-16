@@ -85,6 +85,12 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: password
           POSTGRES_DB: servian
+    
+    environment:
+      QAW_HEADLESS: "true"
+      LOGIN_USERNAME: postgres
+      LOGIN_PASSWORD: password
+    
     steps:
       - checkout
       - install_deps
@@ -92,19 +98,22 @@ jobs:
       - run: 
           name: Start local server
           command: |
+            cd src
+            node_modules/.bin/sequelize db:migrate
             npm run start
             npx wait-on http://localhost:3000
+      
       - run:
           name: Run e2e tests
           command: |
             cd src
-            mkdir -p test-output
             npm run test-e2e
 
-      - store_test_results:
-          path: ./src/test-output
-      - store_artifacts:
-          path: ./src/test-output
+      # - store_test_results:
+      #     path: ./src/test-output
+      # - store_artifacts:
+      #     path: ./src/test-output
+
 
   # Packaging
   pack:
