@@ -79,7 +79,7 @@ jobs:
   # E2E testing
   e2e-tests:
     docker:
-      - image: circleci/node:lts
+      - image: circleci/node:lts-browsers
       - image: circleci/postgres:9.6-alpine
         environment:
           POSTGRES_USER: postgres
@@ -87,7 +87,7 @@ jobs:
           POSTGRES_DB: servian
     
     environment:
-      QAW_HEADLESS: "true"
+      QAW_HEADLESS: true
       LOGIN_USERNAME: postgres
       LOGIN_PASSWORD: password
     
@@ -96,12 +96,10 @@ jobs:
       - install_deps
 
       - run: 
-          name: Start local server
+          name: Start the app
           command: |
             cd src
-            node_modules/.bin/sequelize db:migrate
-            npm run start
-            npx wait-on http://localhost:3000
+            npm run start         
       
       - run:
           name: Run e2e tests
