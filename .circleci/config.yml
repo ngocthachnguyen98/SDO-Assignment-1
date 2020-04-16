@@ -136,6 +136,9 @@ workflows:
       - integration-tests:
           requires:
             - build
+      - e2e-tests:
+          requires:
+              - integration-tests
       - pack:
           requires:
             - build
