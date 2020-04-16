@@ -96,7 +96,7 @@ jobs:
       - install_deps
 
       - run: 
-          name: Start the app
+          name: Start the app in the background
           command: |
             cd src
             npm run start    
