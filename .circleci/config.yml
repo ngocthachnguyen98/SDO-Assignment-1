@@ -88,7 +88,6 @@ jobs:
     
     environment:
       QAW_HEADLESS: true
-      QAW_ARTIFACT_PATH: ./artifacts
       LOGIN_USERNAME: postgres
       LOGIN_PASSWORD: password
     
@@ -114,9 +113,11 @@ jobs:
           command: |
             cd src
             npm run test-e2e
+          environment:
+            QAW_ARTIFACT_PATH: /tmp/artifacts
 
       - store_artifacts:
-          path: ./artifacts
+          path: /tmp/artifacts
 
 
   # Packaging
