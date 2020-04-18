@@ -23,6 +23,8 @@ In the `src/package.json` file, a `test-unit` script is prepared to initiate the
 
 The result of the test can be found at `src/test-output`.
 
+Artifacts can be collected from the *CircleCI Pipeline*.
+
 In the *CircleCI Pipeline*, the test is automated in `build` job:
 
 ```
@@ -44,6 +46,8 @@ In the `src/package.json` file, a `test-lint` script is prepared to initiate lin
 ```
 
 The result of linting can be found at `src/test-output`.
+
+Artifacts can be collected from the *CircleCI Pipeline*.
 
 In the *CircleCI Pipeline*, linting is automated in `build` job:
 
@@ -67,6 +71,8 @@ In the `src/package.json` file, a `test-coverage` script is prepared to generate
 ```
 
 The reports can be found at `src/coverage`.
+
+Artifacts can be collected from the *CircleCI Pipeline*.
 
 In the **CircleCI Pipeline**, generating code coverage report is automated in `build` job:
 
@@ -115,6 +121,8 @@ The image is built using `docker build` with `Dockerfile` located at `./src`.
 
 Then image is saved as `.tar` file with `docker save` and stored as an artefact.
 
+Artifacts can be collected from the *CircleCI Pipeline*.
+
 ```
 pack:
     docker:
@@ -153,6 +161,8 @@ The result of the test can be found at `src/test-output`.
 In the *CircleCI Pipeline*, the test is automated in `integration-tests` job. 
 This job involves two images. The primary container is for running *npm* script. The second image is for standing up a *psql* database and running tests against it. The second image also has some environment variables configured, such as username, password and database name.
 
+Artifacts can be collected from the *CircleCI Pipeline*.
+
 ```
 integration-tests:
     docker:
@@ -181,10 +191,57 @@ integration-tests:
 
 ---
 
-### Break down into end to end tests
+### Running end to end tests
 
-Explain what these tests test and why
+In the `src/package.json` file, a `test-e2e` script is prepared to initiate the E2E test which is implemented using *QaWolf*. The command `npw qawolf test` run tests located at `.qawolf/tests` with the some of the environment variables specifed for the database:
 
 ```
-Give an example
+"test-e2e": "cross-env NODE_ENV=e2e DB_USERNAME=postgres DB_PASSWORD=password DB_NAME=servian npx qawolf test ./tests"
 ```
+
+In the *CircleCI Pipeline*, the test is automated in `e2e-tests` job. 
+This job involves browser testing and a running app in the background. Therefore `-browsers` is included in the Docker primary image name. The second image is similiar to the one in integration testing setup, which is for standing up a *pqsl* database.
+
+```
+docker:
+    - image: circleci/node:lts-browsers
+    - image: circleci/postgres:9.6-alpine
+    environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: password
+        POSTGRES_DB: servian
+```
+
+For this job, a few other environment variables are set up for browser testing to login and run the tests in headless mode:
+
+```
+environment:
+    QAW_HEADLESS: true
+    LOGIN_USERNAME: postgres
+    LOGIN_PASSWORD: password
+```
+
+To keep the app running in the background, `background: true` is included when starting the app:
+
+```
+- run: 
+    name: Start the app in the background
+    command: |
+        cd src
+        npm run start    
+    background: true
+```
+
+To generate QaWolf artifacts, a environment variable `QAW_ARTIFACT_PATH` is added with the path in running e2e tests step:
+
+```
+- run:
+    name: Run e2e tests
+    command: |
+        cd src
+        npm run test-e2e
+    environment:
+        QAW_ARTIFACT_PATH: /tmp/artifacts
+```
+
+Artifacts can be collected from the *CircleCI Pipeline*.

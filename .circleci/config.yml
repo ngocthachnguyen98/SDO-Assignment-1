@@ -9,6 +9,7 @@ commands:
             cd src
             npm install
 
+
 jobs:
   # CI build and run unit tests & linting
   build:
@@ -135,6 +136,7 @@ jobs:
 
       - store_artifacts:
           path: ./image.tar
+
 
 workflows:
   version: 2
