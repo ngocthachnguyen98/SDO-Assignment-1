@@ -5,3 +5,4 @@ terraform.tfstate.backup
 tmp/
 src/test-output
 src/coverage
+src/docker-compose.yml

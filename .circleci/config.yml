@@ -76,6 +76,44 @@ jobs:
           path: ./src/test-output
 
 
+  # E2E testing
+  e2e-tests:
+    docker:
+      - image: circleci/node:lts-browsers
+      - image: circleci/postgres:9.6-alpine
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: servian
+    
+    environment:
+      QAW_HEADLESS: true
+      LOGIN_USERNAME: postgres
+      LOGIN_PASSWORD: password
+    
+    steps:
+      - checkout
+      - install_deps
+
+      - run: 
+          name: Start the app in the background
+          command: |
+            cd src
+            npm run start    
+          background: true     
+      
+      - run:
+          name: Run e2e tests
+          command: |
+            cd src
+            npm run test-e2e
+          environment:
+            QAW_ARTIFACT_PATH: /tmp/artifacts
+
+      - store_artifacts:
+          path: /tmp
+
+
   # Packaging
   pack:
     docker:
@@ -106,6 +144,9 @@ workflows:
       - integration-tests:
           requires:
             - build
+      - e2e-tests:
+          requires:
+              - integration-tests
       - pack:
           requires:
             - build
