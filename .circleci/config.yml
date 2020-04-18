@@ -95,12 +95,6 @@ jobs:
       - checkout
       - install_deps
 
-      # - run:
-      #     name: Database migration
-      #     command: |
-      #       cd src
-      #       node_modules/.bin/sequelize db:migrate
-
       - run: 
           name: Start the app in the background
           command: |
@@ -117,7 +111,7 @@ jobs:
             QAW_ARTIFACT_PATH: /tmp/artifacts
 
       - store_artifacts:
-          path: /tmp/artifacts
+          path: /tmp
 
 
   # Packaging
