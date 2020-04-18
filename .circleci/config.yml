@@ -88,6 +88,7 @@ jobs:
     
     environment:
       QAW_HEADLESS: true
+      QAW_ARTIFACT_PATH: ./artifacts
       LOGIN_USERNAME: postgres
       LOGIN_PASSWORD: password
     
@@ -95,11 +96,11 @@ jobs:
       - checkout
       - install_deps
 
-      - run:
-          name: Database migration
-          command: |
-            cd src
-            node_modules/.bin/sequelize db:migrate
+      # - run:
+      #     name: Database migration
+      #     command: |
+      #       cd src
+      #       node_modules/.bin/sequelize db:migrate
 
       - run: 
           name: Start the app in the background
@@ -115,7 +116,7 @@ jobs:
             npm run test-e2e
 
       - store_artifacts:
-          path: ./qawolf
+          path: ./artifacts
 
 
   # Packaging
