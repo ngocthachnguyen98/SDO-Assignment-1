@@ -121,7 +121,7 @@ The image is built using `docker build` with `Dockerfile` located at `./src`.
 
 Then image is saved as `.tar` file with `docker save` and stored as an artefact.
 
-Artifacts can be collected from the *CircleCI Pipeline*.
+Artifacts can be collected from the *CircleCI Pipeline* by running `pack` job:
 
 ```
 pack:
@@ -146,6 +146,18 @@ pack:
           path: ./image.tar
 ```
 
+To keep this only run on master branch, `filters` is declared in the `workflows` for `pack` job:
+
+```
+- pack:
+    requires:
+    - build
+    filters:
+    branches:
+        only:
+        - master
+```
+
 ---
 
 ## Running integration tests
@@ -161,7 +173,7 @@ The result of the test can be found at `src/test-output`.
 In the *CircleCI Pipeline*, the test is automated in `integration-tests` job. 
 This job involves two images. The primary container is for running *npm* script. The second image is for standing up a *psql* database and running tests against it. The second image also has some environment variables configured, such as username, password and database name.
 
-Artifacts can be collected from the *CircleCI Pipeline*.
+Artifacts can be collected from the *CircleCI Pipeline*. Below is `integration-tests` automated job:
 
 ```
 integration-tests:
@@ -212,7 +224,7 @@ docker:
         POSTGRES_DB: servian
 ```
 
-For this job, a few other environment variables are set up for browser testing to login and run the tests in headless mode:
+For this job, a few other environment variables are set up for *browser testing* to login and run the tests in *headless mode*:
 
 ```
 environment:
@@ -232,7 +244,7 @@ To keep the app running in the background, `background: true` is included when s
     background: true
 ```
 
-To generate QaWolf artifacts, a environment variable `QAW_ARTIFACT_PATH` is added with the path in running e2e tests step:
+To generate *QaWolf artifacts*, a environment variable `QAW_ARTIFACT_PATH` is added with the path in running e2e tests step:
 
 ```
 - run:
