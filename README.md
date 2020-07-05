@@ -1,4 +1,4 @@
-# COSC2759 SDO Assignment 1
+# COSC2759 System Deployment and Operation - Assignment 1
 
 **Student Name: Thach Ngoc Nguyen**
 
