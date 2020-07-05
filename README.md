@@ -1,4 +1,4 @@
-# COSC2759 System Deployment and Operation - Assignment 1
+# COSC2759 System Deployment and Operation - Assignment 1 Semeter 1 2020 at RMIT
 
 **Student Name: Thach Ngoc Nguyen**
 
