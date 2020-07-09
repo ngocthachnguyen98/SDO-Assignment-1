@@ -4,7 +4,25 @@
 
 **Student Number: s3651311**
 
+## Requirements
+
+The assignment specifications can be viewed [here](./SDO_Assignment1.pdf)
+
+### Summary
+
 The goal of this assignement is for ACME corp to be able to commit the files into their own GitHub repository and set up a *CircleCI Pipeline*, and have it work with no modification to the files necessary.
+
+The pipeline includes:
+
+- Unit testing
+- Static Code Analysis / Lint
+- Code Coverage Report
+- Generating an artefact that can be deployed
+- Support and trigger builds on multiple branches
+- Artefact should only be generated on the master branch
+- Integration testing with the PostgreSQL database backend
+- End-to-end tests
+
 
 In the root directory, a CircleCi configuration file is provided, in which defines a pipeline that automates build, test and package tasks.
 
